@@ -1,14 +1,28 @@
-expose:
-  Args: 
-    - --v
-    - 4
-  Annotations:
-    helm.sh/hook: post-install,post-upgrade
-    helm.sh/hook-delete-policy: hook-succeeded
-
+PipelineSecrets: {}
 cleanup:
-  Args: 
-    - --cleanup
   Annotations:
     helm.sh/hook: pre-delete
     helm.sh/hook-delete-policy: hook-succeeded
+  Args:
+  - --cleanup
+expose:
+  Annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-delete-policy: hook-succeeded
+  Args:
+  - --v
+  - 4
+  config:
+    domain: ops.k8s.dtnz.co.nz
+    exposer: Ingress
+    http: "true"
+jenkins:
+  Servers:
+    GHE:
+    - Name: digitaltransformationnz.visualstudio.com
+      Url: https://digitaltransformationnz.visualstudio.com/api/v3/
+    Global:
+      EnvVars:
+        DOCKER_REGISTRY: 350485012778.dkr.ecr.ap-southeast-2.amazonaws.com
+        TILLER_NAMESPACE: kube-system
+prow: {}
